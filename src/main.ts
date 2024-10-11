@@ -23,8 +23,9 @@ WA.onInit().then(async () => {
     console.log(material);
 
     if (!moving || !material) {
-      mySound.stop();
+      mySound?.stop();
     } else {
+      mySound?.stop();
       playRandomSound(material);
     }
   });

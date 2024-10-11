@@ -3,38 +3,38 @@ import { Json } from "@workadventure/tiled-map-type-guard";
 
 const soundFiles = {
     wood: [
-        '/src/assets/wood_01_a.wav',
-        '/src/assets/wood_01_b.wav',
-        '/src/assets/wood_01_c.wav',
-        '/src/assets/wood_01_d.wav'
+        '/public/sounds/wood_01_a.wav',
+        '/public/sounds/wood_01_b.wav',
+        '/public/sounds/wood_01_c.wav',
+        '/public/sounds/wood_01_d.wav'
     ],
     forest: [
-        '/src/assets/forest_01.wav',
-        '/src/assets/forest_02.wav',
-        '/src/assets/forest_03.wav'
+        '/public/sounds/forest_01.wav',
+        '/public/sounds/forest_02.wav',
+        '/public/sounds/forest_03.wav'
     ],
     snow: [
-        '/src/assets/snow_01_a.wav',
-        '/src/assets/snow_01_b.wav',
-        '/src/assets/snow_01_c.wav',
-        '/src/assets/snow_01_d.wav'
+        '/public/sounds/snow_01_a.wav',
+        '/public/sounds/snow_01_b.wav',
+        '/public/sounds/snow_01_c.wav',
+        '/public/sounds/snow_01_d.wav'
     ],
     marble: [
-        '/src/assets/marble_01.wav',
-        '/src/assets/marble_02.wav',
-        '/src/assets/marble_03.wav'
+        '/public/sounds/marble_01.wav',
+        '/public/sounds/marble_02.wav',
+        '/public/sounds/marble_03.wav'
     ],
     grass: [
-        '/src/assets/grass_01.wav',
-        '/src/assets/grass_02.wav',
-        '/src/assets/grass_03.wav'
+        '/public/sounds/grass_01.wav',
+        '/public/sounds/grass_02.wav',
+        '/public/sounds/grass_03.wav'
     ],
     stone: [
-        '/src/assets/stone_01_a.wav',
-        '/src/assets/stone_01_b.wav',
-        '/src/assets/stone_01_c.wav',
-        '/src/assets/stone_01_d.wav',
-        '/src/assets/stone_01_e.wav'
+        '/public/sounds/stone_01_a.wav',
+        '/public/sounds/stone_01_b.wav',
+        '/public/sounds/stone_01_c.wav',
+        '/public/sounds/stone_01_d.wav',
+        '/public/sounds/stone_01_e.wav'
     ]
 };
 

@@ -7,7 +7,6 @@ let mySound: Sound;
 let stepSoundAreas: any[] = [];
 
 function playRandomSound(material: MaterialType) {
-  console.log(soundFiles[material]);
   if (!soundFiles[material]) return;
 
   const randomIndex = Math.floor(Math.random() * soundFiles[material].length);

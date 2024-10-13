@@ -38,7 +38,7 @@ if (
 }
 
 export default defineConfig({
-  base: "/stepFX",
+  base: "./",
   build: {
     sourcemap: true,
     rollupOptions: {

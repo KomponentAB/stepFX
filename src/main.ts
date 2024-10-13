@@ -1,4 +1,5 @@
 /// <reference types="@workadventure/iframe-api-typings" />
+/// <reference types="vite/client" />
 
 import { bootstrapExtra } from "@workadventure/scripting-api-extra";
 import { checkPlayerMaterial, mySound, playRandomSound } from "./footstep";

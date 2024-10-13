@@ -5,12 +5,16 @@ import { MaterialType, SoundArea } from "./models/footstep.model";
 
 let mySound: Sound;
 let stepSoundAreas: any[] = [];
-
+const BASE_URL = "/stepFX";
 function playRandomSound(material: MaterialType) {
   if (!soundFiles[material]) return;
 
   const randomIndex = Math.floor(Math.random() * soundFiles[material].length);
-  mySound = WA.sound.loadSound(soundFiles[material][randomIndex]);
+  mySound = WA.sound.loadSound(
+    `${import.meta.env.PROD ? BASE_URL : ""}${
+      soundFiles[material][randomIndex]
+    }`
+  );
   mySound.play(audioConfig);
 }
 

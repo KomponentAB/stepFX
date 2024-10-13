@@ -22,11 +22,15 @@ WA.onInit().then(async () => {
     const material = await checkPlayerMaterial({ x, y });
     console.log(material);
 
-    if (!moving || !material) {
-      mySound?.stop();
-    } else {
-      mySound?.stop();
-      playRandomSound(material);
+    if (!material) {
+      return mySound?.stop();
     }
+
+    if (!moving && !material) {
+      return mySound?.stop();
+    }
+
+    mySound?.stop();
+    playRandomSound(material);
   });
 });

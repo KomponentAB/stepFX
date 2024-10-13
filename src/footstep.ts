@@ -10,7 +10,9 @@ function playRandomSound(material: MaterialType) {
   if (!soundFiles[material]) return;
 
   const randomIndex = Math.floor(Math.random() * soundFiles[material].length);
-  mySound = WA.sound.loadSound(soundFiles[material][randomIndex]);
+  mySound = WA.sound.loadSound(
+    `${import.meta.env.BASE_URL}${soundFiles[material][randomIndex]}`
+  );
   mySound.play(audioConfig);
 }
 

@@ -544,12 +544,12 @@
                 {
                  "height":129.194,
                  "id":32,
-                 "name":"mood_area",
+                 "name":"mud_area",
                  "properties":[
                         {
                          "name":"material",
                          "type":"string",
-                         "value":"mood"
+                         "value":"mud"
                         }, 
                         {
                          "name":"stepSound",

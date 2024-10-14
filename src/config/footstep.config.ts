@@ -39,7 +39,7 @@ export const soundFiles: Record<MaterialType, string[]> = {
 };
 
 export const audioConfig: SoundConfig = {
-  volume: 1,
+  volume: 0.25,
   loop: false,
   rate: 1.5,
   detune: 1,

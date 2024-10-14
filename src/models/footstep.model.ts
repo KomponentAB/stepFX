@@ -3,8 +3,10 @@ export enum MaterialType {
   forest = "forest",
   snow = "snow",
   marble = "marble",
-  grass = "grass",
   stone = "stone",
+  mud = "mud",
+  path = "path",
+  water = "water",
 }
 
 export interface SoundArea {

@@ -50,13 +50,18 @@ export const soundFiles: Record<MaterialType, string[]> = {
   [MaterialType.water]: [
     "/sounds/water_01_a.wav",
     "/sounds/water_01_b.wav",
-    "/sounds/water_01_c.wav",
-    "/sounds/stone_01_d.wav"
+    //"/sounds/water_01_c.wav" (Doesnt sound good)
+  ],
+  [MaterialType.sand]: [
+    "/sounds/sand_01_a.wav",
+    "/sounds/sand_01_b.wav",
+    "/sounds/sand_01_c.wav"
+    //"/sounds/water_01_c.wav" (Doesnt sound good)
   ],
 };
 
 export const audioConfig: SoundConfig = {
-  volume: 0.25,
+  volume: 0.15,
   loop: false,
   rate: 1.5,
   detune: 1,

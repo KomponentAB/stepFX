@@ -7,6 +7,7 @@ export enum MaterialType {
   mud = "mud",
   path = "path",
   water = "water",
+  sand = "sand"
 }
 
 export interface SoundArea {

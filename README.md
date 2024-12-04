@@ -1,78 +1,90 @@
-# WorkAdventure Map Starter Kit
+## About stepFX
 
-![office map thumbnail](./office.png)
+This function triggers a step sound effect from a predefined set of sounds.
+The sounds are sourced from "leohpaz" and can be found at https://thowsenmedia.itch.io/.
 
-This is a starter kit to help you build your own map for [WorkAdventure](https://workadventu.re).
+**Note:** Please do not redistribute the sound files in any project other than adding stepFX to your Workadventure.
 
-To understand how to use this starter kit, follow the tutorial at [https://docs.workadventu.re/map-building/tiled-editor/](https://docs.workadventu.re/map-building/tiled-editor/).
+    - Credits:
+    - Sounds by "leohpaz" (https://thowsenmedia.itch.io/)
+    - stepFX created by Kilian (https://github.com/klinshy) and Pedro (https://github.com/PedCoelho)
 
-If you have any questions, feel free to ask in [WorkAdventure office](https://play.staging.workadventu.re/@/tcm/workadventure/wa-village).
+You can try (AND HEAR) a demo with all sound files [HERE](https://play.workadventu.re/_/04occgjyqgr1/komponentab.github.io/stepFX/office.tmj).
+Or see a video of it in motion [HERE](https://rec.cocreation.world/8YwkJZHL)!
 
-## Upload your map
+## Applying stepFX to Your Room
 
-In the .env file you can set your upload strategy to `GH_PAGES` (default) or `MAP_STORAGE`. Simply comment the option you don't want to use.
+1.  ### Set up Vite config file's base variable (if hosting on GITHUB PAGES or any sub-domain):
 
-Uploading a map using [Github Pages](https://docs.github.com/pages) will host your project in the Github servers and it's the most straight forward way to add new maps to your world.
+    Update the `vite.config.ts` file with the repository's GitHub page path.
+    In your case, set the base to `/your-repository-name`.
 
-Uploading a map using the [WA map storage](https://docs.workadventu.re/map-building/tiled-editor/publish/wa-hosted) will host your project in the WA servers. It's a bit more difficult to setup but it comes with great advantages like being able to have private repositories.
+    ```ts
+    //vite.config.ts
 
-## Structure
+    export default defineConfig({
+      base: "/your-repository-name",
+      // other configurations
+    });
+    ```
 
-We recommend following this file structure:
+    For example if your map is hosted on GitHub at the Repository `my-map`put '/my-map' at the base. **This is only needed if the sound is hosted on a sub-domain, as it is in our example.**
 
-* *public/*: Static files like PDFs or audio files
-* *src/*: Scripts files or design source files
-* *tilesets/*: All PNG tilesets
+    Sounds are hosted at `https://komponentworksab.github.io/stepFX/sounds`, and they will be loaded from there by WorkAdventure.
 
-> **Pro tips**
-> If you want to use more than one map file, just add the new map file in the root folder (we recommend creating a copy of *office.tmj* and editing it, in order to avoid any mistakes).
-> We recommend using 512x512 images for the map thumbnails.
-> If you are going to create custom websites to embed in the map, please reference the HTML files in the `input` option in *vite.config.js*.
+    If you host your audio files on S3 or Firebase, you dont need to make any changes to `vite.config.ts` and can simply replace
 
-## Requirements
+    ```ts
+    //footstep.ts
 
-Node.js version >=17
+    ${import.meta.env.BASE_URL}/sounds/${soundFiles[material][randomIndex]}
+    ```
 
-## Installation and testing
+    with the actual address where your files are hosted. (e.i. `https://file-storage.com/${soundFiles[material][randomIndex]}`).
 
-With npm installed (comes with [node](https://nodejs.org/en/)), run the following commands into a terminal in the root directory of the project:
+2.  ### Update `main.ts`:
 
-```shell
-npm install
-```
+    Add the following code to your `main.ts` file to integrate stepFX:
 
-Then, you can test your map by running:
+    ```ts
+    //main.ts
 
-```sh
-npm run dev
-```
+    import { checkPlayerMaterial, mySound, playRandomSound } from "./footstep";
 
-You can also test the optimized map as it will be in production by running:
+    WA.onInit().then(async () => {
+      WA.player.onPlayerMove(async ({ x, y, moving }) => {
+        const material = await checkPlayerMaterial({ x, y });
+        console.log(material);
 
-```sh
-npm run build
-npm run prod
-```
+        if (!material) {
+          return mySound?.stop();
+        }
 
-You can manually upload your map to the map storage by running:
+        if (!moving && !material) {
+          return mySound?.stop();
+        } else {
+          mySound?.stop();
+          return playRandomSound(material);
+        }
+      });
+    });
+    ```
 
-```sh
-npm run deploy
-```
+3.  ### Add the `config/footstep.config.ts`
 
-## Licenses
+    This file contains Typescript type-definitions and a mapping between different `MaterialTypes` and their respective `filenames`. Keep in mind, a single material can be associated with multiple audio-files to introduce diversity in the audio playback.
 
-This project contains multiple licenses as follows:
+4.  ### Add the `footstep.ts` file:
 
-* [Code license](./LICENSE.code) *(all files except those for other licenses)*
-* [Map license](./LICENSE.map) *(`office.tmj` and the map visual as well)*
-* [Assets license](./LICENSE.assets) *(the files inside the `src/assets/` folder)*
+    This is the file with all the functions / behaviours associated with the playing of the audio files.
 
-### About third party assets
+5.  ### Add sounds to the map:
 
-If you add third party assets in your map, do not forget to:
+    To add sounds to the map, follow these steps:
 
-1. Credit the author and license of a tileset with the "tilesetCopyright" property by etiding the tileset in Tiled.
-2. Add the tileset license text in *LICENSE.assets*.
-3. Credit the author and license of a map with the "mapCopyright" property in the custom properties of the map.
-4. Add the map license text in *LICENSE.map*.
+    - In Tiled Map Editor, create an area object in the desired layer (e.g., "floorLayer"). The area can have any name (e.g., `wood_area-1`) but must be of class `area`. If you have multiple areas of the same material, ensure each area has a unique name.
+    - Add the following custom properties to the area in Tiled:
+      - `material` (string): Choose and type from the following options: `wood`, `stone`, `snow`, `forest`, `water`, `marble`, `mud`, `path`, `sand`.
+      - `stepSound` (boolean): Set to `true`.
+
+    This setup will allow the stepFX to recognize the material and play the corresponding sound when the player moves over the area.

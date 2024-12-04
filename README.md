@@ -9,12 +9,8 @@ The sounds are sourced from "leohpaz" and can be found at https://thowsenmedia.i
     - Sounds by "leohpaz" (https://thowsenmedia.itch.io/)
     - stepFX created by Kilian (https://github.com/klinshy) and Pedro (https://github.com/PedCoelho)
 
-You can see (AND HEAR) a demo with all sound files [HERE](https://play.workadventu.re/_/04occgjyqgr1/komponentab.github.io/stepFX/office.tmj).
-
-[![Video demo here](https://rec.cocreation.world/8YwkJZHL)](https://rec.cocreation.world/8YwkJZHL)
-<video src="https://rec.cocreation.world/8YwkJZHL" width="320" height="240" controls></video>
-
-<iframe width="560" height="315" src="https://rec.cocreation.world/8YwkJZHL" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+You can try (AND HEAR) a demo with all sound files [HERE](https://play.workadventu.re/_/04occgjyqgr1/komponentab.github.io/stepFX/office.tmj).
+Or see a video of it in motion [HERE](https://rec.cocreation.world/8YwkJZHL)!
 
 ## Applying stepFX to Your Room
 

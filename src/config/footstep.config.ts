@@ -59,7 +59,7 @@ export const soundFiles: Record<MaterialType, string[]> = {
     //"/sounds/water_01_c.wav" (Doesnt sound good)
   ],
 };
-
+///some sounds are missing, but you can add them here
 export const audioConfig: SoundConfig = {
   volume: 0.15,
   loop: false,

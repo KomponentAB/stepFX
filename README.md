@@ -11,6 +11,11 @@ The sounds are sourced from "leohpaz" and can be found at https://thowsenmedia.i
 
 You can see (AND HEAR) a demo with all sound files [HERE](https://play.workadventu.re/_/04occgjyqgr1/komponentab.github.io/stepFX/office.tmj).
 
+[![Video demo here](https://rec.cocreation.world/8YwkJZHL)](https://rec.cocreation.world/8YwkJZHL)
+<video src="https://rec.cocreation.world/8YwkJZHL" width="320" height="240" controls></video>
+
+<iframe width="560" height="315" src="https://rec.cocreation.world/8YwkJZHL" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ## Applying stepFX to Your Room
 
 1.  ### Set up Vite config file's base variable (if hosting on GITHUB PAGES or any sub-domain):
@@ -18,13 +23,14 @@ You can see (AND HEAR) a demo with all sound files [HERE](https://play.workadven
     Update the `vite.config.ts` file with the repository's GitHub page path.
     In your case, set the base to `/your-repository-name`.
 
-        ```ts
-        // vite.config.ts
-        export default defineConfig({
-          base: '/your-repository-name',
-          // other configurations
-        });
-        ```
+    ```ts
+    //vite.config.ts
+
+    export default defineConfig({
+      base: "/your-repository-name",
+      // other configurations
+    });
+    ```
 
     For example if your map is hosted on GitHub at the Repository `my-map`put '/my-map' at the base. **This is only needed if the sound is hosted on a sub-domain, as it is in our example.**
 
@@ -34,6 +40,7 @@ You can see (AND HEAR) a demo with all sound files [HERE](https://play.workadven
 
     ```ts
     //footstep.ts
+
     ${import.meta.env.BASE_URL}/sounds/${soundFiles[material][randomIndex]}
     ```
 
@@ -44,6 +51,8 @@ You can see (AND HEAR) a demo with all sound files [HERE](https://play.workadven
     Add the following code to your `main.ts` file to integrate stepFX:
 
     ```ts
+    //main.ts
+
     import { checkPlayerMaterial, mySound, playRandomSound } from "./footstep";
 
     WA.onInit().then(async () => {

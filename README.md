@@ -88,3 +88,19 @@ Or see a video of it in motion [HERE](https://rec.cocreation.world/8YwkJZHL)!
       - `stepSound` (boolean): Set to `true`.
 
     This setup will allow the stepFX to recognize the material and play the corresponding sound when the player moves over the area.
+
+    /**
+     * This method is responsible for loading and defining sounds for different areas.
+     * 
+     * Note for improvement:
+     * It might be easier to load/define the sounds using Tiles or Tiled Layers. 
+     * Doing it over areas is quite cumbersome, especially when dealing with intricate paths.
+     * 
+     * We started the implementation using TileLayer but did not complete it. 
+     * Most maps do not have many different materials. 
+     * Therefore, it might be feasible to add 3 additional Tiled Layers to define the materials. 
+     * This would make it easier to define intricate paths or frequent material changes.
+     * 
+     * In an ideal world, there would be only ONE single layer, with different tiles in it. 
+     * Each tile defines the material.
+     */

@@ -2,7 +2,7 @@ import { TileDescriptor } from "@workadventure/iframe-api-typings";
 import { SoundConfig } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/Sound/Sound";
 import { FireworkColors, FIREWORKS_CONFIG } from "./config/fireworks.config";
 
-export function setupLocalFireworks(): void {
+export function setupFireworksButton(): void {
   const button = "firework-btn";
 
   WA.ui.actionBar.addButton({
@@ -10,8 +10,8 @@ export function setupLocalFireworks(): void {
     label: "Fireworks! 🎆",
     type: "button",
     callback: () => {
-      WA.ui.actionBar.removeButton(button);
-      triggerFirework().finally(() => setupLocalFireworks());
+      WA.ui.actionBar.removeButton(button); //remove button temporarily
+      triggerFirework().finally(() => setupFireworksButton()); //restore button after fireworks promise
     },
   });
 

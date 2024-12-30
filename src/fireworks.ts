@@ -11,7 +11,7 @@ export function setupLocalFireworks(): void {
     type: "button",
     callback: () => {
       WA.ui.actionBar.removeButton(button);
-      triggerFirework().then(() => setupLocalFireworks());
+      triggerFirework().finally(() => setupLocalFireworks());
     },
   });
 

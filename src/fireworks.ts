@@ -1,6 +1,6 @@
 import { TileDescriptor } from "@workadventure/iframe-api-typings";
 import { SoundConfig } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/Sound/Sound";
-import { FIREWORKS_CONFIG } from "./config/fireworks.config";
+import { FireworkColors, FIREWORKS_CONFIG } from "./config/fireworks.config";
 
 export function setupLocalFireworks(): void {
   WA.ui.actionBar.addButton({
@@ -30,14 +30,19 @@ export async function triggerFirework(): Promise<void> {
     x: Math.floor(origin.x / 32),
     y: Math.floor(origin.y / 32),
     layer: FIREWORKS_CONFIG.animationLayer,
-    tile: FIREWORKS_CONFIG.firstgid + FIREWORKS_CONFIG.tileId,
+    tile: null,
   };
+
+  const colors = Object.values(FireworkColors);
+  const fireworkColor = colors[Math.floor(Math.random() * colors.length)];
 
   const tiles = new Array(9).fill(null).map((_, index) => {
     const dx = (index % 3) - 1; // -1, 0, 1 for column offset
     const dy = Math.floor(index / 3) - 1; // -1, 0, 1 for row offset
+
     return {
       ...tileConfig,
+      tile: `${fireworkColor}_${index + 1}`,
       x: tileConfig.x + dx,
       y: tileConfig.y + dy,
     };

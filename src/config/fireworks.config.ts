@@ -3,3 +3,12 @@ export const FIREWORKS_CONFIG = {
   tileId: 769,
   animationLayer: "anim",
 };
+
+export enum FireworkColors {
+  RED = "red",
+  PINK = "pink",
+  GREEN = "green",
+  YELLOW = "yellow",
+  PURPLE = "purple",
+  BLUE = "blue",
+}

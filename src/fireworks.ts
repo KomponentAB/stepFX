@@ -1,19 +1,19 @@
 import { TileDescriptor } from "@workadventure/iframe-api-typings";
 import { SoundConfig } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/Sound/Sound";
-import { FIREWORKS_CONFIG } from "./config/fireworks.config";
+import { FireworkColors, FIREWORKS_CONFIG } from "./config/fireworks.config";
 
 export function setupLocalFireworks(): void {
-    WA.ui.actionBar.addButton({
-      id: "firework-btn",
-      label: "Fireworks! 🎆",
-      type: "button",
-      callback: () => {
-        WA.ui.actionBar.removeButton('firework-btn');
-        triggerFirework();
-      },
-    });
-  }
-  
+  const button = "firework-btn";
+
+  WA.ui.actionBar.addButton({
+    id: button,
+    label: "Fireworks! 🎆",
+    type: "button",
+    callback: () => {
+      WA.ui.actionBar.removeButton(button);
+      triggerFirework().then(() => setupLocalFireworks());
+    },
+  });
 
   /* -------------------------------------------------------------------------- */
   /*                                DOES NOT WORK                               */
@@ -26,12 +26,12 @@ export function setupLocalFireworks(): void {
   //       });
   //     }
   //   });
-
+}
 
 export async function triggerFirework(): Promise<void> {
   const origin = await WA.player.getPosition();
 
-  const colors = ["pink", "yellow", "red", "purple", "green", "blue"];
+  const colors = Object.values(FireworkColors);
   const selectedColor = colors[Math.floor(Math.random() * colors.length)];
 
   const tileConfig: TileDescriptor = {
@@ -65,21 +65,17 @@ export async function triggerFirework(): Promise<void> {
         console.error("Failed to trigger firework", e);
         reject(e);
       }
-    }, 1400); // Remove tiles after 1350ms
-
-    setTimeout(() => {
-      setupLocalFireworks();
-    }, 1400); // Wait 1350ms before setting up local fireworks again
+    }, FIREWORKS_CONFIG.fireworkDuration); // Remove tiles after FireworkDuration (1400ms)
   });
 
-
-function playSound(path: string) {
-  const newSound = WA.sound.loadSound(path);
-  const positive = Math.random() >= 0.5;
-  const detune = Math.round(Math.random() * 850);
-  const config: SoundConfig = {
-    loop: false,
-    detune: positive ? detune : -detune,
-  };
-  newSound.play(config);
-}}
+  function playSound(path: string) {
+    const newSound = WA.sound.loadSound(path);
+    const positive = Math.random() >= 0.5;
+    const detune = Math.round(Math.random() * 850);
+    const config: SoundConfig = {
+      loop: false,
+      detune: positive ? detune : -detune,
+    };
+    newSound.play(config);
+  }
+}

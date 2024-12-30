@@ -13,7 +13,7 @@ export function setupLocalFireworks(): void {
       WA.ui.actionBar.removeButton(button);
       triggerFirework().then(() => setupLocalFireworks());
     },
-  });
+  }); 
 
   /* -------------------------------------------------------------------------- */
   /*                                DOES NOT WORK                               */
@@ -55,6 +55,14 @@ export async function triggerFirework(): Promise<void> {
   WA.room.setTiles([...tiles]);
 
   playSound(`${import.meta.env.BASE_URL}/sounds/firework_single.mp3`);
+
+  WA.event.broadcast("firework", {
+    playerId: WA.player.id,
+    x: tileConfig.x,
+    y: tileConfig.y,
+    color: selectedColor,
+  });
+  console.log("ping send");
 
   return new Promise((resolve, reject) => {
     setTimeout(() => {

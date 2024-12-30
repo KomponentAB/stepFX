@@ -62,9 +62,11 @@ export async function triggerFirework(): Promise<void> {
 
 function playSound(path: string) {
   const newSound = WA.sound.loadSound(path);
+  const positive = Math.random() >= 0.5;
+  const detune = Math.round(Math.random() * 850);
   const config: SoundConfig = {
     loop: false,
-    detune: Math.round(Math.random() * 150),
+    detune: positive ? detune : -detune,
   };
   newSound.play(config);
 }

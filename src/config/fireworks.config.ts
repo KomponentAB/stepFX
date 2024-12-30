@@ -1,6 +1,6 @@
 export const FIREWORKS_CONFIG = {
   animationLayer: "anim",
-  fireworkDuration: 1000 * 2.5, //2.5 seconds
+  fireworkDuration: 1000 * 1.35, //2.5 seconds
 };
 
 export enum FireworkColors {

@@ -7,21 +7,24 @@ export function setupLocalFireworks(): void {
     id: "firework-btn",
     label: "Fireworks! 🎆",
     type: "button",
-    callback: () => triggerFirework(),
+    callback: () => {
+      WA.ui.actionBar.removeButton("firework-btn");
+      triggerFirework();
+    },
   });
-
-  /* -------------------------------------------------------------------------- */
-  /*                                DOES NOT WORK                               */
-  /* -------------------------------------------------------------------------- */
-  //   document.addEventListener("keydown", (ev) => {
-  //     console.log(ev);
-  //     if (ev.key === "F") {
-  //       triggerFirework().then(() => {
-  //         console.log("🎇🧨🎆");
-  //       });
-  //     }
-  //   });
 }
+
+/* -------------------------------------------------------------------------- */
+/*                                DOES NOT WORK                               */
+/* -------------------------------------------------------------------------- */
+//   document.addEventListener("keydown", (ev) => {
+//     console.log(ev);
+//     if (ev.key === "F") {
+//       triggerFirework().then(() => {
+//         console.log("🎇🧨🎆");
+//       });
+//     }
+//   });
 
 export async function triggerFirework(): Promise<void> {
   const origin = await WA.player.getPosition();
@@ -30,7 +33,7 @@ export async function triggerFirework(): Promise<void> {
     x: Math.floor(origin.x / 32),
     y: Math.floor(origin.y / 32),
     layer: FIREWORKS_CONFIG.animationLayer,
-    tile: null,
+    tile: null, // Placeholder, will be set per tile
   };
 
   const colors = Object.values(FireworkColors);
@@ -42,9 +45,9 @@ export async function triggerFirework(): Promise<void> {
 
     return {
       ...tileConfig,
-      tile: `${fireworkColor}_${index + 1}`,
       x: tileConfig.x + dx,
       y: tileConfig.y + dy,
+      tile: `${fireworkColor}_${index + 1}`,
     };
   });
 
@@ -63,15 +66,15 @@ export async function triggerFirework(): Promise<void> {
       }
     }, FIREWORKS_CONFIG.fireworkDuration);
   });
-}
 
-function playSound(path: string) {
-  const newSound = WA.sound.loadSound(path);
-  const positive = Math.random() >= 0.5;
-  const detune = Math.round(Math.random() * 850);
-  const config: SoundConfig = {
-    loop: false,
-    detune: positive ? detune : -detune,
-  };
-  newSound.play(config);
+  function playSound(path: string) {
+    const newSound = WA.sound.loadSound(path);
+    const positive = Math.random() >= 0.5;
+    const detune = Math.round(Math.random() * 850);
+    const config: SoundConfig = {
+      loop: false,
+      detune: positive ? detune : -detune,
+    };
+    newSound.play(config);
+  }
 }

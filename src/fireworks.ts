@@ -1,4 +1,5 @@
 import { TileDescriptor } from "@workadventure/iframe-api-typings";
+import { SoundConfig } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/Sound/Sound";
 import { FIREWORKS_CONFIG } from "./config/fireworks.config";
 
 export function setupLocalFireworks(): void {
@@ -60,5 +61,10 @@ export async function triggerFirework(): Promise<void> {
 }
 
 function playSound(path: string) {
-  WA.sound.loadSound(path).play(undefined);
+  const newSound = WA.sound.loadSound(path);
+  const config: SoundConfig = {
+    loop: false,
+    detune: Math.round(Math.random() * 150),
+  };
+  newSound.play(config);
 }

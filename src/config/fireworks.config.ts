@@ -1,7 +1,6 @@
 export const FIREWORKS_CONFIG = {
-  firstgid: 1833, //tileset firstgid
-  tileId: 769,
   animationLayer: "anim",
+  fireworkDuration: 1000 * 2.5, //2.5 seconds
 };
 
 export enum FireworkColors {

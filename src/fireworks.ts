@@ -61,7 +61,7 @@ export async function triggerFirework(): Promise<void> {
         console.error("Failed to trigger firework", e);
         reject(e);
       }
-    }, 1000 * 2.5);
+    }, FIREWORKS_CONFIG.fireworkDuration);
   });
 }
 

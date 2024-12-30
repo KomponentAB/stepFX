@@ -2,6 +2,7 @@
 /// <reference types="vite/client" />
 
 import { bootstrapExtra } from "@workadventure/scripting-api-extra";
+import { setupLocalFireworks } from "./fireworks";
 import { checkPlayerMaterial, mySound, playRandomSound } from "./footstep";
 
 console.log("Script started successfully");
@@ -34,4 +35,7 @@ WA.onInit().then(async () => {
       return playRandomSound(material);
     }
   });
+
+  setupLocalFireworks();
+  console.log("🎆 Fireworks initialized successfully");
 });

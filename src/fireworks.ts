@@ -3,12 +3,17 @@ import { SoundConfig } from "@workadventure/iframe-api-typings/play/src/front/Ap
 import { FIREWORKS_CONFIG } from "./config/fireworks.config";
 
 export function setupLocalFireworks(): void {
-  WA.ui.actionBar.addButton({
-    id: "firework-btn",
-    label: "Fireworks! 🎆",
-    type: "button",
-    callback: () => triggerFirework(),
-  });
+    WA.ui.actionBar.addButton({
+      id: "firework-btn",
+      label: "Fireworks! 🎆",
+      type: "button",
+      callback: () => {
+        WA.ui.actionBar.removeButton('firework-btn');
+        triggerFirework();
+      },
+    });
+  }
+  
 
   /* -------------------------------------------------------------------------- */
   /*                                DOES NOT WORK                               */
@@ -21,16 +26,19 @@ export function setupLocalFireworks(): void {
   //       });
   //     }
   //   });
-}
+
 
 export async function triggerFirework(): Promise<void> {
   const origin = await WA.player.getPosition();
+
+  const colors = ["pink", "yellow", "red", "purple", "green", "blue"];
+  const selectedColor = colors[Math.floor(Math.random() * colors.length)];
 
   const tileConfig: TileDescriptor = {
     x: Math.floor(origin.x / 32),
     y: Math.floor(origin.y / 32),
     layer: FIREWORKS_CONFIG.animationLayer,
-    tile: FIREWORKS_CONFIG.firstgid + FIREWORKS_CONFIG.tileId,
+    tile: null, // Placeholder, will be set per tile
   };
 
   const tiles = new Array(9).fill(null).map((_, index) => {
@@ -40,6 +48,7 @@ export async function triggerFirework(): Promise<void> {
       ...tileConfig,
       x: tileConfig.x + dx,
       y: tileConfig.y + dy,
+      tile: `${selectedColor}_${index + 1}`,
     };
   });
 
@@ -56,9 +65,13 @@ export async function triggerFirework(): Promise<void> {
         console.error("Failed to trigger firework", e);
         reject(e);
       }
-    }, 1000 * 2.5);
+    }, 1350); // Remove tiles after 1350ms
+
+    setTimeout(() => {
+      setupLocalFireworks();
+    }, 1350); // Wait 1350ms before setting up local fireworks again
   });
-}
+
 
 function playSound(path: string) {
   const newSound = WA.sound.loadSound(path);
@@ -69,4 +82,4 @@ function playSound(path: string) {
     detune: positive ? detune : -detune,
   };
   newSound.play(config);
-}
+}}

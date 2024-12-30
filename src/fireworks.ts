@@ -65,11 +65,11 @@ export async function triggerFirework(): Promise<void> {
         console.error("Failed to trigger firework", e);
         reject(e);
       }
-    }, 1350); // Remove tiles after 1350ms
+    }, 1400); // Remove tiles after 1350ms
 
     setTimeout(() => {
       setupLocalFireworks();
-    }, 1350); // Wait 1350ms before setting up local fireworks again
+    }, 1000); // Wait 1350ms before setting up local fireworks again
   });
 
 

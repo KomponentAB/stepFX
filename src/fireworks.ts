@@ -1,11 +1,18 @@
 import { TileDescriptor } from "@workadventure/iframe-api-typings";
 import { SoundConfig } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/Sound/Sound";
-import { FireworkColors, FIREWORKS_CONFIG } from "./config/fireworks.config";
+import { FIREWORKS_CONFIG } from "./config/fireworks.config";
+import { FireworkColors, FireworkConfig } from "./models/fireworks.model";
 
 export function setupFireworks(): void {
   setupFireworksButton();
   setupFireworksListener();
   console.log("🎆 Fireworks initialized successfully");
+}
+
+async function generateFireworkConfig(): Promise<FireworkConfig> {
+  const { x, y } = await WA.player.getPosition();
+  const colors = Object.values(FireworkColors);
+  return { x, y, color: colors[Math.floor(Math.random() * colors.length)] };
 }
 
 export function setupFireworksButton(): void {
@@ -15,33 +22,24 @@ export function setupFireworksButton(): void {
     id: button,
     label: "Fireworks! 🎆",
     type: "button",
-    callback: () => {
+    callback: async () => {
+      const fireworkConfig = await generateFireworkConfig();
+
       WA.ui.actionBar.removeButton(button); //remove button temporarily
-      triggerFirework()
-        .then((firework: FireworkConfig) => {
-          WA.event.broadcast("firework", {
-            playerId: WA.player.id,
-            x: firework.x,
-            y: firework.y,
-            color: firework.color,
-          });
-        })
-        .finally(() => setupFireworksButton()); //restore button after fireworks promise
+      triggerFirework(fireworkConfig).finally(() => setupFireworksButton()); //restore button after fireworks promise
+
+      WA.event.broadcast("firework", {
+        playerId: WA.player.uuid,
+        ...fireworkConfig,
+      });
     },
   });
 }
 
-interface FireworkConfig {
-  color: FireworkColors;
-  x: number;
-  y: number;
-}
-
 export async function triggerFirework(
-  config?: FireworkConfig
+  config: FireworkConfig
 ): Promise<FireworkConfig> {
-  const tileConfig = config || (await generateFireworkConfig());
-  const tiles = await generateFireworkTiles(tileConfig);
+  const tiles = await generateFireworkTiles(config);
 
   WA.room.setTiles(tiles);
 
@@ -51,7 +49,7 @@ export async function triggerFirework(
     setTimeout(() => {
       try {
         WA.room.setTiles([...tiles.map((x) => ({ ...x, tile: null }))]);
-        resolve(tileConfig);
+        resolve(config);
       } catch (e) {
         console.error("Failed to trigger firework", e);
         reject(e);
@@ -68,16 +66,6 @@ export async function triggerFirework(
       detune: positive ? detune : -detune,
     };
     newSound.play(config);
-  }
-
-  async function generateFireworkConfig(): Promise<FireworkConfig> {
-    const { x, y } = await WA.player.getPosition();
-    return { x, y, color: getRandomFireworkColor() };
-  }
-
-  function getRandomFireworkColor() {
-    const colors = Object.values(FireworkColors);
-    return colors[Math.floor(Math.random() * colors.length)];
   }
 
   async function generateFireworkTiles(
@@ -107,11 +95,12 @@ export async function triggerFirework(
 
 function setupFireworksListener() {
   WA.event.on("firework").subscribe((value) => {
-    const { playerId, x, y, color } = value.data as {
+    const { playerId, ...fireworkConfig } = value.data as {
       playerId: string;
     } & FireworkConfig;
-    if (playerId !== WA.player.id) {
-      triggerFirework({ x, y, color });
+
+    if (playerId !== WA.player.uuid) {
+      triggerFirework(fireworkConfig);
     }
   });
 }

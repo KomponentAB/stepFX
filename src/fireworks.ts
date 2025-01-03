@@ -1,4 +1,4 @@
-import { TileDescriptor } from "@workadventure/iframe-api-typings";
+import { Position, TileDescriptor } from "@workadventure/iframe-api-typings";
 import { SoundConfig } from "@workadventure/iframe-api-typings/play/src/front/Api/Iframe/Sound/Sound";
 import { FIREWORKS_CONFIG } from "./config/fireworks.config";
 import { FireworkColors, FireworkConfig } from "./models/fireworks.model";
@@ -65,7 +65,7 @@ export async function triggerFirework(config: FireworkConfig): Promise<void> {
 
   WA.room.setTiles(tiles);
 
-  playSound(`${import.meta.env.BASE_URL}/sounds/firework_single.mp3`);
+  playFireworkSound(config);
 
   return clearTilesDelayed(tiles, FIREWORKS_CONFIG.fireworkDuration);
 }
@@ -87,15 +87,40 @@ async function clearTilesDelayed(
   });
 }
 
-function playSound(path: string) {
-  const newSound = WA.sound.loadSound(path);
+async function playFireworkSound(source: Position) {
+  const newSound = WA.sound.loadSound(FIREWORKS_CONFIG.fireworkSoundPath);
   const positive = Math.random() >= 0.5;
   const detune = Math.round(Math.random() * 850);
-  const config: SoundConfig = {
+  const soundConfig: SoundConfig = {
     loop: false,
     detune: positive ? detune : -detune,
+    volume: await calculateVolumeByDistance(source),
+    //todo maybe implement panning
   };
-  newSound.play(config);
+  newSound.play(soundConfig);
+}
+
+async function calculateVolumeByDistance(source: Position): Promise<number> {
+  const MAX_DISTANCE = 600;
+  const MAX_VOLUME = 0.65;
+  const MIN_VOLUME = 0.001;
+
+  const listener = await WA.player.getPosition();
+
+  if (listener.x === source.x && listener.y === source.y) return MAX_VOLUME;
+
+  const euclideanDistance = Math.sqrt(
+    (source.x - listener.x) ** 2 + (source.y - listener.y) ** 2
+  );
+
+  if (euclideanDistance > MAX_DISTANCE) return 0;
+
+  function scale(distance: number) {
+    const percent = distance / MAX_DISTANCE;
+    return percent * (MIN_VOLUME - MAX_VOLUME) + MAX_VOLUME;
+  }
+
+  return scale(euclideanDistance);
 }
 
 function setupFireworksListener() {

@@ -36,61 +36,66 @@ export function setupFireworksButton(): void {
   });
 }
 
-export async function triggerFirework(
+async function generateFireworkTiles(
   config: FireworkConfig
-): Promise<FireworkConfig> {
+): Promise<TileDescriptor[]> {
+  const tileConfig: TileDescriptor = {
+    x: Math.floor(config.x / 32),
+    y: Math.floor(config.y / 32),
+    layer: FIREWORKS_CONFIG.animationLayer,
+    tile: null, // Placeholder, will be set per tile
+  };
+
+  const tiles = new Array(9).fill(null).map((_, index) => {
+    const dx = (index % 3) - 1; // -1, 0, 1 for column offset
+    const dy = Math.floor(index / 3) - 1; // -1, 0, 1 for row offset
+    return {
+      ...tileConfig,
+      x: tileConfig.x + dx,
+      y: tileConfig.y + dy,
+      tile: `${config.color}_${index + 1}`,
+    };
+  });
+
+  return tiles;
+}
+
+export async function triggerFirework(config: FireworkConfig): Promise<void> {
   const tiles = await generateFireworkTiles(config);
 
   WA.room.setTiles(tiles);
 
   playSound(`${import.meta.env.BASE_URL}/sounds/firework_single.mp3`);
 
+  return clearTilesDelayed(tiles, FIREWORKS_CONFIG.fireworkDuration);
+}
+
+async function clearTilesDelayed(
+  tiles: TileDescriptor[],
+  delay = 1000
+): Promise<void> {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       try {
         WA.room.setTiles([...tiles.map((x) => ({ ...x, tile: null }))]);
-        resolve(config);
-      } catch (e) {
+        resolve();
+      } catch (e: any) {
         console.error("Failed to trigger firework", e);
-        reject(e);
+        reject(e as Error);
       }
-    }, FIREWORKS_CONFIG.fireworkDuration); // Remove tiles after FireworkDuration (1400ms)
+    }, delay);
   });
+}
 
-  function playSound(path: string) {
-    const newSound = WA.sound.loadSound(path);
-    const positive = Math.random() >= 0.5;
-    const detune = Math.round(Math.random() * 850);
-    const config: SoundConfig = {
-      loop: false,
-      detune: positive ? detune : -detune,
-    };
-    newSound.play(config);
-  }
-
-  async function generateFireworkTiles(
-    config: FireworkConfig
-  ): Promise<TileDescriptor[]> {
-    const tileConfig: TileDescriptor = {
-      x: Math.floor(config.x / 32),
-      y: Math.floor(config.y / 32),
-      layer: FIREWORKS_CONFIG.animationLayer,
-      tile: null, // Placeholder, will be set per tile
-    };
-
-    const tiles = new Array(9).fill(null).map((_, index) => {
-      const dx = (index % 3) - 1; // -1, 0, 1 for column offset
-      const dy = Math.floor(index / 3) - 1; // -1, 0, 1 for row offset
-      return {
-        ...tileConfig,
-        x: tileConfig.x + dx,
-        y: tileConfig.y + dy,
-        tile: `${config.color}_${index + 1}`,
-      };
-    });
-
-    return tiles;
-  }
+function playSound(path: string) {
+  const newSound = WA.sound.loadSound(path);
+  const positive = Math.random() >= 0.5;
+  const detune = Math.round(Math.random() * 850);
+  const config: SoundConfig = {
+    loop: false,
+    detune: positive ? detune : -detune,
+  };
+  newSound.play(config);
 }
 
 function setupFireworksListener() {

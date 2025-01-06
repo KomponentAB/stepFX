@@ -124,8 +124,8 @@ async function calculateVolumeByDistance(source: Position): Promise<number> {
 }
 
 function setupFireworksListener() {
-  WA.event.on("firework").subscribe((value) => {
-    const { playerId, ...fireworkConfig } = value.data as {
+  WA.event.on("firework").subscribe(({ data }) => {
+    const { playerId, ...fireworkConfig } = data as {
       playerId: string;
     } & FireworkConfig;
 
